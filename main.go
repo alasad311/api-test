@@ -13,5 +13,5 @@ func main() {
 		c.JSON(http.StatusOK, gin.H{"data": "hello world"})
 	})
 
-	r.Run(":80")
+	r.Run(":6060")
 }
