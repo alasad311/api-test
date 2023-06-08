@@ -23,7 +23,21 @@ func GetStudent(db *gorm.DB) gin.HandlerFunc {
 			})
 			return
 		}
-		results := db.Where("std_id_str = ?", paramID).Find(&students)
+		results := db.Raw(`SELECT reg_students.std_id,reg_students.std_id_str,reg_students.national_id,reg_students.full_name,reg_student_nls.full_nls_name,reg_students.acc_avg,
+		reg_majors.major_name,reg_majors_nls.major_name AS nls_major_name,reg_major_plans.academic_level_desc,reg_major_plans.academic_level_desc_ar,reg_student_personal_info.phone,
+		reg_student_statuses.status_name,fin_fund_inst.fund_inst_name,reg_students.block
+		FROM reg_students
+		LEFT JOIN reg_student_nls ON reg_student_nls.std_id = reg_students.std_id
+		LEFT JOIN reg_majors ON reg_majors.major_id = reg_students.major_id
+		LEFT JOIN reg_majors_nls ON reg_majors_nls.major_id = reg_students.major_id
+		LEFT JOIN reg_major_plans ON reg_major_plans.plan_id = reg_students.plan_id
+		LEFT JOIN reg_student_personal_info ON reg_student_personal_info.std_id = reg_students.std_id
+		LEFT JOIN reg_student_statuses ON reg_student_statuses.status_id = reg_students.status_id
+		LEFT JOIN reg_student_semester_summary ON reg_students.last_semester_summary_id = reg_student_semester_summary.std_mark_cache_id 
+		LEFT JOIN fin_student_funds ON reg_student_semester_summary.student_fund_id = fin_student_funds.fund_id
+		LEFT JOIN fin_fund_types ON fin_student_funds.fund_type_id = fin_fund_types.fund_type_id
+		LEFT JOIN fin_fund_inst ON fin_fund_types.fund_inst_id = fin_fund_inst.fund_inst_id 
+		WHERE reg_students.std_id_str = ?`, paramID).Find(&students)
 		if results.RowsAffected == 0 {
 			c.IndentedJSON(http.StatusNotFound,
 				gin.H{
