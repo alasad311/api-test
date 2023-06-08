@@ -37,7 +37,7 @@ func GetStudent(db *gorm.DB) gin.HandlerFunc {
 		LEFT JOIN fin_student_funds ON reg_student_semester_summary.student_fund_id = fin_student_funds.fund_id
 		LEFT JOIN fin_fund_types ON fin_student_funds.fund_type_id = fin_fund_types.fund_type_id
 		LEFT JOIN fin_fund_inst ON fin_fund_types.fund_inst_id = fin_fund_inst.fund_inst_id 
-		WHERE reg_students.std_id_str = ?`, paramID).Find(&students)
+		WHERE reg_students.std_id_str = ?`, paramID).Scan(&students)
 		if results.RowsAffected == 0 {
 			c.IndentedJSON(http.StatusNotFound,
 				gin.H{
