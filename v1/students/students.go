@@ -10,12 +10,16 @@ import (
 	"gorm.io/gorm"
 )
 
+type apiKey struct {
+	ApiKey string `json:"api_key"`
+}
+
 func GetStudent(db *gorm.DB) gin.HandlerFunc {
 	var students []structs.RegStudents
-	var apiKey []structs.ApiKey
+	var apikey apiKey
 	return func(c *gin.Context) {
-		c.BindJSON(&apiKey)
-		if apiKey != nil {
+		c.BindJSON(&apikey)
+		if len(apikey.ApiKey) > 0 {
 			c.IndentedJSON(http.StatusNotFound,
 				gin.H{
 					"Message":    "Record not found",
