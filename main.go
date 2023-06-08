@@ -15,7 +15,7 @@ func main() {
 	r := gin.Default()
 	r.Use(common.LoggerInitializer())
 	r.Use(cors.Default())
-
+	module.DbConnection()
 	apiRoutes := r.Group("/v1")
 	studentRoute := apiRoutes.Group("/student/")
 	{

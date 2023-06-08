@@ -15,7 +15,6 @@ import (
 )
 
 var DB *gorm.DB
-var DBPolicy *gorm.DB
 
 func DbConnection() {
 	common.LoadEnv()
