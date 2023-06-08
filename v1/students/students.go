@@ -14,7 +14,8 @@ func GetStudent(db *gorm.DB) gin.HandlerFunc {
 	var students []structs.RegStudents
 	var apiKey []structs.ApiKey
 	return func(c *gin.Context) {
-		if err := c.BindJSON(&apiKey); err != nil {
+		c.BindJSON(&apiKey)
+		if apiKey != nil {
 			c.IndentedJSON(http.StatusNotFound,
 				gin.H{
 					"Message":    "Record not found",
