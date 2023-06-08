@@ -1,6 +1,7 @@
 package students
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -16,19 +17,19 @@ type apiKey struct {
 
 func GetStudent(db *gorm.DB) gin.HandlerFunc {
 	var students []structs.RegStudents
-	// var apikey apiKey
+	var apikey apiKey
 	return func(c *gin.Context) {
-		// c.BindJSON(&apikey)
-		// fmt.Println(apikey.ApiKey)
-		// if len(apikey.ApiKey) > 0 {
-		// 	c.IndentedJSON(http.StatusNotFound,
-		// 		gin.H{
-		// 			"Message":    "Record not found",
-		// 			"Method":     http.MethodPost,
-		// 			"StatusCode": http.StatusBadRequest,
-		// 		})
-		// 	return
-		// }
+		c.BindJSON(&apikey)
+		fmt.Println(apikey.ApiKey)
+		if len(apikey.ApiKey) > 0 {
+			c.IndentedJSON(http.StatusNotFound,
+				gin.H{
+					"Message":    "Record not found",
+					"Method":     http.MethodPost,
+					"StatusCode": http.StatusBadRequest,
+				})
+			return
+		}
 		paramID, ParamErr := strconv.Atoi(c.Param("id"))
 		if ParamErr != nil {
 			c.IndentedJSON(http.StatusNotFound, gin.H{
