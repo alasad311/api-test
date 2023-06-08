@@ -19,7 +19,7 @@ func main() {
 	apiRoutes := r.Group("/v1")
 	studentRoute := apiRoutes.Group("/student/")
 	{
-		studentRoute.GET("/:id", students.GetStudent(module.DB))
+		studentRoute.POST("/:id", students.GetStudent(module.DB))
 	}
 	r.NoRoute(func(c *gin.Context) {
 		common.WriteToLog(c, c.Request.RequestURI+" doesnt exist on the serve", zapcore.InfoLevel, "INFO")

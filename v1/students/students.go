@@ -12,7 +12,17 @@ import (
 
 func GetStudent(db *gorm.DB) gin.HandlerFunc {
 	var students []structs.RegStudents
+	var apiKey []structs.ApiKey
 	return func(c *gin.Context) {
+		if err := c.BindJSON(&apiKey); err != nil {
+			c.IndentedJSON(http.StatusNotFound,
+				gin.H{
+					"Message":    "Record not found",
+					"Method":     http.MethodPost,
+					"StatusCode": http.StatusBadRequest,
+				})
+			return
+		}
 		paramID, ParamErr := strconv.Atoi(c.Param("id"))
 		if ParamErr != nil {
 			c.IndentedJSON(http.StatusNotFound, gin.H{
