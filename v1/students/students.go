@@ -1,33 +1,33 @@
 package students
 
 import (
+	"api-test/structs"
 	"net/http"
 	"strconv"
-
-	"api-test/structs"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
 
 type apiKey struct {
-	ApiKey string `json:"api_key"`
+	ApiKey string
 }
 
 func GetStudent(db *gorm.DB) gin.HandlerFunc {
 	var students []structs.RegStudents
 	var apikey apiKey
+
 	return func(c *gin.Context) {
 		if err := c.BindJSON(&apikey); err != nil {
 			c.IndentedJSON(http.StatusNotFound,
 				gin.H{
-					"Message":    "Record not found",
+					"Message":    "Api key not found",
 					"Method":     http.MethodPost,
 					"StatusCode": http.StatusBadRequest,
 				})
 			return
 		}
-		if len(apikey.ApiKey) > 0 {
+		if len(apikey.ApiKey) <= 0 {
 			c.IndentedJSON(http.StatusNotFound,
 				gin.H{
 					"Message":    "Record not found",
