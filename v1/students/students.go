@@ -2,6 +2,7 @@ package students
 
 import (
 	"api-test/structs"
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -27,6 +28,8 @@ func GetStudent(db *gorm.DB) gin.HandlerFunc {
 				})
 			return
 		}
+		fmt.Println(apikey.ApiKey)
+		fmt.Println(len(apikey.ApiKey))
 		if len(apikey.ApiKey) <= 0 {
 			c.IndentedJSON(http.StatusNotFound,
 				gin.H{
